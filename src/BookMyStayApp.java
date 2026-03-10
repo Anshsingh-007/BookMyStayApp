@@ -1,24 +1,8 @@
-// UC2: Hardcoded room types
-class Room {
-    String type;
-    int beds;
-    int price;
-
-    Room(String type, int beds, int price) {
-        this.type = type;
-        this.beds = beds;
-        this.price = price;
-    }
-
-    void displayRoom() {
-        System.out.println(type + " Room | Beds: " + beds + " | Price: $" + price);
-    }
-}
+import java.util.HashMap;
 
 public class BookMyStayApp {
 
     public static void main(String[] args) {
-        // UC1
         System.out.println("Welcome to BookMyStay App v1.0\n");
 
         // UC2
@@ -29,6 +13,18 @@ public class BookMyStayApp {
         single.displayRoom();
         doubleRoom.displayRoom();
         suite.displayRoom();
+        System.out.println();
+
+        // UC3: Room Inventory
+        HashMap<String, Integer> inventory = new HashMap<>();
+        inventory.put("Single", 10);
+        inventory.put("Double", 5);
+        inventory.put("Suite", 2);
+
+        System.out.println("Room Inventory:");
+        for (String type : inventory.keySet()) {
+            System.out.println(type + " Rooms Available: " + inventory.get(type));
+        }
         System.out.println();
     }
 }
