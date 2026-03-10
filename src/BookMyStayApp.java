@@ -15,15 +15,20 @@ public class BookMyStayApp {
         suite.displayRoom();
         System.out.println();
 
-        // UC3: Room Inventory
+        // UC3
         HashMap<String, Integer> inventory = new HashMap<>();
         inventory.put("Single", 10);
         inventory.put("Double", 5);
         inventory.put("Suite", 2);
 
-        System.out.println("Room Inventory:");
-        for (String type : inventory.keySet()) {
-            System.out.println(type + " Rooms Available: " + inventory.get(type));
+        // UC4: Room Search
+        System.out.println("Available Rooms for Booking:");
+        Room[] rooms = {single, doubleRoom, suite};
+        for (Room room : rooms) {
+            if (inventory.get(room.type) > 0) {
+                room.displayRoom();
+                System.out.println("Available: " + inventory.get(room.type));
+            }
         }
         System.out.println();
     }
