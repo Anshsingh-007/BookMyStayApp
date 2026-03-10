@@ -1,15 +1,5 @@
 import java.util.*;
 
-class Reservation {
-    String guestName;
-    String roomType;
-
-    Reservation(String guestName, String roomType) {
-        this.guestName = guestName;
-        this.roomType = roomType;
-    }
-}
-
 public class BookMyStayApp {
 
     public static void main(String[] args) {
@@ -42,16 +32,31 @@ public class BookMyStayApp {
         }
         System.out.println();
 
-        // UC5: Booking Request Queue
+        // UC5
         Queue<Reservation> bookingQueue = new LinkedList<>();
         bookingQueue.offer(new Reservation("Alice", "Single"));
         bookingQueue.offer(new Reservation("Bob", "Double"));
         bookingQueue.offer(new Reservation("Charlie", "Suite"));
 
-        System.out.println("Booking requests queued (FIFO order):");
-        for (Reservation res : bookingQueue) {
-            System.out.println(res.guestName + " requested " + res.roomType);
+        // UC6: Room Allocation
+        Set<String> allocatedRoomIds = new HashSet<>();
+        HashMap<String, Set<String>> allocations = new HashMap<>();
+
+        while (!bookingQueue.isEmpty()) {
+            Reservation res = bookingQueue.poll();
+            int available = inventory.get(res.roomType);
+
+            if (available > 0) {
+                String roomId = res.roomType.substring(0,1).toUpperCase() + (allocatedRoomIds.size() + 101);
+                allocatedRoomIds.add(roomId);
+
+                allocations.computeIfAbsent(res.roomType, k -> new HashSet<>()).add(roomId);
+                inventory.put(res.roomType, available - 1);
+
+                System.out.println(res.guestName + " booked " + res.roomType + " | Room ID: " + roomId);
+            } else {
+                System.out.println(res.guestName + " booking failed: No " + res.roomType + " rooms available.");
+            }
         }
-        System.out.println();
     }
 }
