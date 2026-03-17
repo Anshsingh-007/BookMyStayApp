@@ -1,47 +1,37 @@
 import java.util.*;
 
-class Service {
-    String name;
-    double cost;
-
-    Service(String name, double cost) {
-        this.name = name;
-        this.cost = cost;
-    }
-
-    public String toString() {
-        return name + " (₹" + cost + ")";
+class InvalidBookingException extends Exception {
+    InvalidBookingException(String msg) {
+        super(msg);
     }
 }
 
-class AddOnServiceManager {
-    Map<String, List<Service>> map = new HashMap<>();
+class Inventory {
+    Map<String, Integer> rooms = new HashMap<>();
 
-    void addService(String reservationId, Service s) {
-        map.putIfAbsent(reservationId, new ArrayList<>());
-        map.get(reservationId).add(s);
+    Inventory() {
+        rooms.put("Deluxe", 1);
     }
 
-    void display(String reservationId) {
-        List<Service> list = map.getOrDefault(reservationId, new ArrayList<>());
-        double total = 0;
+    void book(String type) throws InvalidBookingException {
+        if (!rooms.containsKey(type))
+            throw new InvalidBookingException("Invalid room type");
 
-        for (Service s : list) {
-            System.out.println(s);
-            total += s.cost;
-        }
+        if (rooms.get(type) <= 0)
+            throw new InvalidBookingException("No rooms available");
 
-        System.out.println("Total Add-on Cost: ₹" + total);
+        rooms.put(type, rooms.get(type) - 1);
     }
 }
 
 public class BookMyStayApp {
     public static void main(String[] args) {
-        AddOnServiceManager manager = new AddOnServiceManager();
+        Inventory inv = new Inventory();
 
-        manager.addService("R101", new Service("Breakfast", 500));
-        manager.addService("R101", new Service("Spa", 1500));
-
-        manager.display("R101");
+        try {
+            inv.book("Luxury"); // invalid
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
